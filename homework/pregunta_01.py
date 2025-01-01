@@ -43,7 +43,11 @@ def pregunta_01():
         'Radio': 2,
     }
 
-    df = pd.read_csv("files/input/news.csv", 'r', index_col=0)
+    input_file = os.path.abspath("./files/input/news.csv")
+
+    if not os.path.exists(input_file):
+        raise FileNotFoundError(f"El archivo {input_file} no existe.")
+    df = pd.read_csv(input_file, index_col=0)
     for col in df.columns:
         plt.plot(df[col], 
             color = colors[col],
@@ -75,7 +79,7 @@ def pregunta_01():
             va='center',
             color=colors[col],
         )
-
+        last_year = df.index[-1]
         plt.text(
             last_year + 0.2,
             df[col][last_year],
@@ -97,8 +101,9 @@ def pregunta_01():
             labels= df.index,
             ha= 'center',
         )
-        
-    output_dir = "../files/plots"
+
+    plt.tight_layout()
+    output_dir = "./files/plots"
     os.makedirs(output_dir, exist_ok=True)  # Crea el directorio si no existe
     print(f"Carpeta creada o existente: {output_dir}")
 
@@ -108,3 +113,4 @@ def pregunta_01():
     print(f"Archivo guardado en: {output_file}")
 
     plt.show()
+
